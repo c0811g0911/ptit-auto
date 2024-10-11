@@ -1,8 +1,8 @@
-install python3.12
+install python3.12 and pip
+    https://www.geeksforgeeks.org/how-to-install-pip-on-windows/
 
-install pip pipenv 
-
-go to folder code
+go to folder code and run cmd
+    pip install pipenv
     pipenv shell
     pip install -r requirements.txt
 
