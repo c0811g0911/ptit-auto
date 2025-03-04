@@ -27,7 +27,7 @@ def login(driver, web_url,u, p):
 
 def is_pass(driver):
     try:
-        driver.find_element(by=By.XPATH, value="//span[contains(@class, 'badge badge-success rounded mb-1')]/strong[text()='Hoàn thành:']")
+        driver.find_element(by=By.XPATH, value="//div[contains(@class, 'badge rounded-pill alert-success icon-no-margin')]/strong[text()='Hoàn thành:']")
         return True
     except NoSuchElementException:
         return False
@@ -66,12 +66,20 @@ def do_homework(driver):
         (By.XPATH, f"//input[@value='Hoàn thành bài thi...']"))).click()
 
     time.sleep(.5)
+
+    values = ["Nộp Bài Và Kết Thúc", "Nộp bài và kết thúc"]
+    xpath_expression = "//button[" + " or ".join([f"contains(text(), '{value}')" for value in values]) + "]"
+
     WebDriverWait(driver, 5).until(ec.visibility_of_element_located(
-        (By.XPATH, f"//button[text()='Nộp bài và kết thúc']"))).click()
+        (By.XPATH, xpath_expression))).click()
 
     time.sleep(.5)
-    dialog = driver.find_element(By.XPATH, value="//div[@role='dialog']")
-    dialog.find_element(By.XPATH, value="//input[@value='Nộp bài và kết thúc']").click()
+    dialog = driver.find_element(By.XPATH, value="//div[@role='document']")
+
+    xpath_expression = "//button[@data-action='save']"
+    submit_button = dialog.find_element(By.XPATH, xpath_expression)
+    submit_button.click()
+
 
     time.sleep(.5)
     driver.find_element(By.XPATH, value="//a[text()='Dừng xem lại']").click()

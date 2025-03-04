@@ -13,7 +13,7 @@ import chromedriver_autoinstaller
 
 def load_driver():        
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     options.add_argument('--domain')
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--no-sandbox')
