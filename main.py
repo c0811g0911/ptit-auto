@@ -27,7 +27,7 @@ def login(driver, web_url,u, p):
 
 def is_pass(driver):
     try:
-        driver.find_element(by=By.XPATH, value="//div[contains(@class, 'badge rounded-pill alert-success icon-no-margin')]/strong[text()='Hoàn thành:']")
+        driver.find_element(by=By.XPATH, value="//div[@role='listitem' and contains(., 'Hoàn thành:') and contains(., 'Receive a passing grade')]")
         return True
     except NoSuchElementException:
         return False
@@ -43,14 +43,25 @@ def by_pass_dialog(driver):
 
 def do_homework(driver):
     print("start do_homework")
-    values = ["Thực hiện lại đề thi", "Bắt đầu kiểm tra", "Tiếp tục làm bài"]
-    xpath_expression = "//button[" + " or ".join([f"contains(text(), '{value}')" for value in values]) + "]"
 
-    WebDriverWait(driver, 5).until(ec.visibility_of_element_located(
-        (By.XPATH, xpath_expression))).click()
-    time.sleep(.5)
-    by_pass_dialog(driver)
-    time.sleep(.5)
+    try:
+        WebDriverWait(driver, 5).until(ec.visibility_of_element_located(
+            (By.XPATH, "//button[@type='submit' and contains(text(), 'Attempt quiz')]"))).click()
+    except Exception as e:
+        print("ko co button nay")
+
+    try:
+        values = ["Thực hiện lại đề thi", "Bắt đầu kiểm tra", "Tiếp tục làm bài"]
+        xpath_expression = "//button[" + " or ".join([f"contains(text(), '{value}')" for value in values]) + "]"
+
+        WebDriverWait(driver, 5).until(ec.visibility_of_element_located(
+            (By.XPATH, xpath_expression))).click()
+        time.sleep(.5)
+        by_pass_dialog(driver)
+        time.sleep(.5)
+    except Exception as e:
+        print("ko co step nay")
+
     
     questions = driver.find_elements(by=By.XPATH, value="//div[starts-with(@id, 'question-')]")    
     for q in questions:
